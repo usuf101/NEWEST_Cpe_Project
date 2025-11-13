@@ -1,0 +1,8 @@
+Model Information:
+* title:	Low-Poly Stylized Fruits Collection
+* source:	https://sketchfab.com/3d-models/low-poly-stylized-fruits-collection-f2f0f61bfba54a018db74ef4ccaffc8b
+* author:	Dimitri Matcharashvili (https://sketchfab.com/ditomatch)
+
+Model License:
+* license type:	SKETCHFAB Standard (https://sketchfab.com/licenses)
+* requirements:	Under basic restrictions, use worldwide, on all types of media, commercially or not, and in all types of derivative works
