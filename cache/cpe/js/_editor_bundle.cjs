@@ -9502,6 +9502,164 @@
     property.float(0.9)
   ], OrbitalCamera.prototype, "damping", void 0);
 
+  // js/background-music.js
+  var background_music_exports = {};
+  __export(background_music_exports, {
+    BackgroundMusic: () => BackgroundMusic
+  });
+  var BackgroundMusic = class extends Component3 {
+    start() {
+      this.isPlaying = false;
+      this.buttonPressed = false;
+      this.spacePressed = false;
+      this.audioContext = null;
+      this.audioBuffer = null;
+      this.sourceNode = null;
+      this.gainNode = null;
+      this.initAudio();
+      window.addEventListener("keydown", (e) => {
+        if (e.code === "Space" && !this.spacePressed) {
+          this.spacePressed = true;
+          this.toggleMusic();
+        }
+      });
+      window.addEventListener("keyup", (e) => {
+        if (e.code === "Space") {
+          this.spacePressed = false;
+        }
+      });
+      this.engine.onXRSessionStart.add(this.onXRSessionStart.bind(this));
+      this.engine.onXRSessionEnd.add(this.onXRSessionEnd.bind(this));
+      console.log("BackgroundMusic component initialized");
+    }
+    async initAudio() {
+      try {
+        this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        this.gainNode = this.audioContext.createGain();
+        this.gainNode.gain.value = this.volume;
+        this.gainNode.connect(this.audioContext.destination);
+        await this.loadAudioFile(this.audioFile);
+        console.log("Audio initialized successfully");
+      } catch (error) {
+        console.error("Error initializing audio:", error);
+      }
+    }
+    async loadAudioFile(url) {
+      try {
+        console.log("Loading audio file:", url);
+        const response = await fetch(url);
+        if (!response.ok) {
+          throw new Error(`Failed to load audio: ${response.status} ${response.statusText}`);
+        }
+        const arrayBuffer = await response.arrayBuffer();
+        this.audioBuffer = await this.audioContext.decodeAudioData(arrayBuffer);
+        console.log("Audio file loaded and decoded successfully");
+      } catch (error) {
+        console.error("Error loading audio file:", error);
+        console.warn("Make sure the audio file exists at:", url);
+      }
+    }
+    toggleMusic() {
+      if (this.isPlaying) {
+        this.stopMusic();
+      } else {
+        this.playMusic();
+      }
+    }
+    playMusic() {
+      if (!this.audioContext || !this.audioBuffer) {
+        console.warn("Audio not ready yet");
+        return;
+      }
+      if (this.audioContext.state === "suspended") {
+        this.audioContext.resume();
+      }
+      if (this.sourceNode) {
+        this.sourceNode.stop();
+      }
+      this.sourceNode = this.audioContext.createBufferSource();
+      this.sourceNode.buffer = this.audioBuffer;
+      this.sourceNode.loop = this.loop;
+      this.sourceNode.connect(this.gainNode);
+      this.sourceNode.start(0);
+      this.isPlaying = true;
+      console.log("Background music started");
+    }
+    stopMusic() {
+      if (this.sourceNode) {
+        try {
+          this.sourceNode.stop();
+        } catch (e) {
+        }
+        this.sourceNode = null;
+      }
+      this.isPlaying = false;
+      console.log("Background music stopped");
+    }
+    onXRSessionStart(session, mode) {
+      console.log("XR Session started, mode:", mode);
+      this.xrSession = session;
+    }
+    onXRSessionEnd() {
+      console.log("XR Session ended");
+      this.xrSession = null;
+      this.stopMusic();
+    }
+    update(dt) {
+      if (this.xrSession) {
+        this.checkButtonPress();
+      }
+    }
+    checkButtonPress() {
+      if (!this.xrSession)
+        return;
+      const inputSources = this.xrSession.inputSources;
+      for (let i = 0; i < inputSources.length; i++) {
+        const inputSource = inputSources[i];
+        if (inputSource.handedness !== this.handedness)
+          continue;
+        const gamepad = inputSource.gamepad;
+        if (!gamepad)
+          continue;
+        let buttonPressed = false;
+        if (this.activationButton === "trigger" && gamepad.buttons[0]) {
+          buttonPressed = gamepad.buttons[0].pressed;
+        } else if (this.activationButton === "squeeze" && gamepad.buttons[1]) {
+          buttonPressed = gamepad.buttons[1].pressed;
+        }
+        if (buttonPressed && !this.buttonPressed) {
+          this.toggleMusic();
+        }
+        this.buttonPressed = buttonPressed;
+      }
+    }
+    setVolume(newVolume) {
+      this.volume = Math.max(0, Math.min(1, newVolume));
+      if (this.gainNode) {
+        this.gainNode.gain.value = this.volume;
+      }
+    }
+    onDestroy() {
+      this.stopMusic();
+      if (this.audioContext) {
+        this.audioContext.close();
+      }
+    }
+  };
+  __publicField(BackgroundMusic, "TypeName", "background-music");
+  __publicField(BackgroundMusic, "Properties", {
+    /** Audio file path (relative to project root or full URL) */
+    audioFile: Property.string("audio/background-music.mp3"),
+    /** Volume level (0.0 to 1.0) */
+    volume: Property.float(0.5),
+    /** Loop the music */
+    loop: Property.bool(true),
+    /** Button to toggle music (e.g., 'squeeze', 'trigger') */
+    activationButton: Property.string("trigger"),
+    /** Hand to use ('left' or 'right') */
+    handedness: Property.enum(["left", "right"], "right")
+  });
+
   // js/button.js
   var button_exports = {};
   __export(button_exports, {
@@ -9586,7 +9744,216 @@
     hoverMaterial: Property.material()
   });
 
+  // js/fruit-spawner.js
+  var fruit_spawner_exports = {};
+  __export(fruit_spawner_exports, {
+    FruitSpawner: () => FruitSpawner
+  });
+  var FruitSpawner = class extends Component3 {
+    start() {
+      this.isSpawning = false;
+      this.timeSinceLastSpawn = 0;
+      this.buttonPressed = false;
+      this.spacePressed = false;
+      this.lastSpawnTime = 0;
+      this.minSpawnInterval = 1;
+      window.addEventListener("keydown", (e) => {
+        if (e.code === "Space" && !this.spacePressed) {
+          this.spacePressed = true;
+          this.isSpawning = !this.isSpawning;
+          console.log("Spawning toggled (spacebar):", this.isSpawning);
+          if (this.isSpawning) {
+            this.spawnFruit();
+            this.timeSinceLastSpawn = 0;
+          }
+        }
+      });
+      window.addEventListener("keyup", (e) => {
+        if (e.code === "Space") {
+          this.spacePressed = false;
+        }
+      });
+      this.fruitObjects = [];
+      if (this.fruitPrefabs) {
+        console.log("Raw fruitPrefabs string:", this.fruitPrefabs);
+        const names = this.fruitPrefabs.split(",").map((s) => s.trim());
+        console.log("Parsed prefab names:", names);
+        const allObjects = [];
+        const processObject = (obj) => {
+          allObjects.push(obj);
+          for (let i = 0; i < obj.children.length; i++) {
+            processObject(obj.children[i]);
+          }
+        };
+        processObject(this.engine.scene);
+        console.log("All objects in scene:", allObjects.map((o) => ({
+          name: o.name,
+          type: o.type,
+          id: o.objectId
+        })));
+        for (let name of names) {
+          let found = allObjects.find((obj) => obj.name === name);
+          if (!found) {
+            found = allObjects.find(
+              (obj) => obj.name && (obj.name.includes(name) || name.includes(obj.name.split("_")[0]))
+            );
+          }
+          if (found) {
+            this.fruitObjects.push(found);
+            console.log("\u2713 Found fruit prefab:", name, "as object:", found);
+          } else {
+            console.warn("\u2717 Fruit prefab not found in scene:", name);
+          }
+        }
+      }
+      if (this.fruitObjects.length === 0) {
+        console.error("No fruit prefabs found! Add comma-separated object names to fruitPrefabs property.");
+      }
+      this.engine.onXRSessionStart.add(this.onXRSessionStart.bind(this));
+      this.engine.onXRSessionEnd.add(this.onXRSessionEnd.bind(this));
+      console.log("FruitSpawner initialized with", this.fruitObjects.length, "fruit types");
+    }
+    onXRSessionStart(session, mode) {
+      console.log("XR Session started, mode:", mode);
+      this.xrSession = session;
+    }
+    onXRSessionEnd() {
+      console.log("XR Session ended");
+      this.xrSession = null;
+      this.isSpawning = false;
+    }
+    update(dt) {
+      if (this.xrSession) {
+        this.checkButtonPress();
+      }
+      if (this.isSpawning) {
+        this.timeSinceLastSpawn += dt;
+        const currentTime = performance.now() / 1e3;
+        if (currentTime - this.lastSpawnTime >= this.spawnInterval) {
+          this.spawnFruit();
+          this.lastSpawnTime = currentTime;
+          this.timeSinceLastSpawn = 0;
+        }
+      }
+    }
+    checkButtonPress() {
+      if (!this.xrSession)
+        return;
+      const inputSources = this.xrSession.inputSources;
+      for (let i = 0; i < inputSources.length; i++) {
+        const inputSource = inputSources[i];
+        if (inputSource.handedness !== this.handedness)
+          continue;
+        const gamepad = inputSource.gamepad;
+        if (!gamepad)
+          continue;
+        let buttonPressed = false;
+        if (this.activationButton === "trigger" && gamepad.buttons[0]) {
+          buttonPressed = gamepad.buttons[0].pressed;
+        } else if (this.activationButton === "squeeze" && gamepad.buttons[1]) {
+          buttonPressed = gamepad.buttons[1].pressed;
+        }
+        if (buttonPressed && !this.buttonPressed) {
+          this.isSpawning = !this.isSpawning;
+          console.log("Spawning toggled:", this.isSpawning);
+          if (this.isSpawning) {
+            this.spawnFruit();
+            this.timeSinceLastSpawn = 0;
+          }
+        }
+        this.buttonPressed = buttonPressed;
+      }
+    }
+    spawnFruit() {
+      if (!this.fruitObjects || this.fruitObjects.length === 0) {
+        console.warn("No fruit prefabs available to spawn");
+        return;
+      }
+      try {
+        const randomIndex = Math.floor(Math.random() * this.fruitObjects.length);
+        const fruitPrefab = this.fruitObjects[randomIndex];
+        const fruit = this.engine.scene.addObject(this.object.parent);
+        const spawnPos = new Float32Array(3);
+        this.object.getPositionWorld(spawnPos);
+        const spread = 2;
+        spawnPos[0] += (Math.random() - 0.5) * spread;
+        spawnPos[2] += (Math.random() - 0.5) * spread;
+        fruit.setPositionWorld(spawnPos);
+        const rotation = new Float32Array(4);
+        const randomAngle = Math.random() * Math.PI * 2;
+        rotation[0] = 0;
+        rotation[1] = Math.sin(randomAngle / 2);
+        rotation[2] = 0;
+        rotation[3] = Math.cos(randomAngle / 2);
+        fruit.setRotationWorld(rotation);
+        this.cloneObject(fruitPrefab, fruit);
+        fruit.setPositionWorld(spawnPos);
+        console.log("Spawning at position:", spawnPos);
+        const physxComp = fruit.getComponent("physx");
+        if (physxComp) {
+          try {
+            physxComp.active = true;
+          } catch (e) {
+            console.warn("Error activating physics:", e);
+          }
+        }
+        if (true) {
+          console.log("Fruit spawned at:", spawnPos);
+        }
+      } catch (error) {
+        console.error("Error spawning fruit:", error);
+      }
+    }
+    cloneObject(source, target) {
+      const meshComp = source.getComponent("mesh");
+      if (meshComp) {
+        const newMesh = target.addComponent("mesh");
+        newMesh.mesh = meshComp.mesh;
+        newMesh.material = meshComp.material;
+      }
+      const physxComp = source.getComponent("physx");
+      if (physxComp) {
+        const newPhysx = target.addComponent("physx");
+        newPhysx.shape = physxComp.shape;
+        newPhysx.mass = physxComp.mass;
+        newPhysx.kinematic = physxComp.kinematic;
+        newPhysx.active = false;
+      }
+      const collisionComp = source.getComponent("collision");
+      if (collisionComp) {
+        const newCollision = target.addComponent("collision");
+        newCollision.collider = collisionComp.collider;
+        newCollision.group = collisionComp.group;
+      }
+      for (let child of source.children) {
+        const newChild = this.engine.scene.addObject(target);
+        this.cloneObject(child, newChild);
+      }
+    }
+    onDestroy() {
+      this.isSpawning = false;
+    }
+  };
+  __publicField(FruitSpawner, "TypeName", "fruit-spawner");
+  __publicField(FruitSpawner, "Properties", {
+    /** Array of fruit prefabs to spawn randomly */
+    fruitPrefabs: Property.string(""),
+    // Comma-separated object names
+    /** Spawn interval in seconds */
+    spawnInterval: Property.float(3),
+    /** Spawn position offset from this object */
+    spawnOffset: Property.vector3(),
+    /** Random spawn area size (X, Y, Z range) */
+    randomSpawnArea: Property.vector3(),
+    /** Button to activate spawning (e.g., 'squeeze', 'trigger') */
+    activationButton: Property.string("trigger"),
+    /** Hand to use ('left' or 'right') */
+    handedness: Property.enum(["left", "right"], "right")
+  });
+
   // cache/cpe/js/_editor_index.js
   _registerEditor(dist_exports);
+  _registerEditor(background_music_exports);
   _registerEditor(button_exports);
+  _registerEditor(fruit_spawner_exports);
 })();

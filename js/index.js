@@ -18,7 +18,9 @@ import {MouseLookComponent} from '@wonderlandengine/components';
 import {PlayerHeight} from '@wonderlandengine/components';
 import {TeleportComponent} from '@wonderlandengine/components';
 import {VrModeActiveSwitch} from '@wonderlandengine/components';
+import {BackgroundMusic} from './background-music.js';
 import {ButtonComponent} from './button.js';
+import {FruitSpawner} from './fruit-spawner.js';
 /* wle:auto-imports:end */
 
 export default function(engine) {
@@ -32,6 +34,8 @@ engine.registerComponent(MouseLookComponent);
 engine.registerComponent(PlayerHeight);
 engine.registerComponent(TeleportComponent);
 engine.registerComponent(VrModeActiveSwitch);
+engine.registerComponent(BackgroundMusic);
 engine.registerComponent(ButtonComponent);
+engine.registerComponent(FruitSpawner);
 /* wle:auto-register:end */
 }

@@ -131,13 +131,13 @@
                 {
                     "type": "light",
                     "light": {
-                        "intensity": 10000.0
+                        "intensity": 500.0
                     }
                 }
             ],
             "translation": [
                 3.2880291,
-                22.068634,
+                14.9279975,
                 8.7626237
             ],
             "rotation": [
@@ -158,7 +158,7 @@
                 {
                     "type": "light",
                     "light": {
-                        "intensity": 1000.0
+                        "intensity": 500.0
                     }
                 }
             ],
@@ -1525,8 +1525,8 @@
             ],
             "translation": [
                 0.0,
-                1.75,
-                0.0
+                1.7188688,
+                0.0001541
             ],
             "rotation": [
                 0.0,
@@ -1546,9 +1546,9 @@
                 "file": "models\\teleport-indicator.glb"
             },
             "translation": [
-                0.0,
-                0.0099999,
-                1.3311299
+                -2.1420762,
+                0.438585,
+                0.9504295
             ],
             "rotation": [
                 0.0,
@@ -1792,9 +1792,9 @@
             },
             "parent": "237",
             "scaling": [
-                7.0,
-                7.0,
-                7.0
+                4.0,
+                4.0,
+                4.0
             ],
             "rotation": [
                 0.0,
@@ -1812,9 +1812,9 @@
                         "collider": "box",
                         "box": {
                             "extents": [
-                                27.0,
+                                16.0,
                                 1.0,
-                                28.0
+                                16.0
                             ]
                         }
                     }
@@ -1825,9 +1825,9 @@
                         "shape": "box",
                         "box": {
                             "extents": [
-                                28.0,
+                                16.0,
                                 0.25,
-                                28.0
+                                16.0
                             ]
                         },
                         "gravity": false,
@@ -1885,7 +1885,34 @@
                 "name": "Banana_Banana_0<Banana<RootNode<Fruits.fbx<Sketchfab_model",
                 "file": "models\\fruits\\scene.gltf"
             },
-            "parent": "246"
+            "parent": "246",
+            "scaling": [
+                0.5,
+                0.5,
+                0.5
+            ],
+            "translation": [
+                9.5367431640625e-7,
+                -0.0,
+                20.0
+            ],
+            "rotation": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "components": [
+                {
+                    "originalIndex": 0
+                },
+                {
+                    "type": "physx"
+                },
+                {
+                    "type": "collision"
+                }
+            ]
         },
         "248": {
             "link": {
@@ -1906,7 +1933,28 @@
                 "name": "RedApple_RedApple_0<RedApple<RootNode<Fruits.fbx<Sketchfab_model",
                 "file": "models\\fruits\\scene.gltf"
             },
-            "parent": "250"
+            "parent": "250",
+            "scaling": [
+                0.5,
+                0.5,
+                0.5
+            ],
+            "components": [
+                {
+                    "originalIndex": 0
+                },
+                {
+                    "type": "physx"
+                },
+                {
+                    "type": "collision"
+                }
+            ],
+            "translation": [
+                0.0,
+                0.0,
+                20.0
+            ]
         },
         "252": {
             "link": {
@@ -1927,7 +1975,33 @@
                 "name": "Coconut_Coconut_0<Coconut<RootNode<Fruits.fbx<Sketchfab_model",
                 "file": "models\\fruits\\scene.gltf"
             },
-            "parent": "254"
+            "parent": "254",
+            "scaling": [
+                0.5,
+                0.5,
+                0.5
+            ],
+            "components": [
+                {
+                    "originalIndex": 0
+                },
+                {
+                    "type": "physx",
+                    "physx": {
+                        "sphere": {
+                            "radius": 0.25
+                        }
+                    }
+                },
+                {
+                    "type": "collision"
+                }
+            ],
+            "translation": [
+                0.0,
+                0.0,
+                20.0
+            ]
         },
         "256": {
             "link": {
@@ -1948,7 +2022,28 @@
                 "name": "Orange_Orange_0<Orange<RootNode<Fruits.fbx<Sketchfab_model",
                 "file": "models\\fruits\\scene.gltf"
             },
-            "parent": "258"
+            "parent": "258",
+            "scaling": [
+                0.5,
+                0.5,
+                0.5
+            ],
+            "components": [
+                {
+                    "originalIndex": 0
+                },
+                {
+                    "type": "physx"
+                },
+                {
+                    "type": "collision"
+                }
+            ],
+            "translation": [
+                0.0,
+                0.0,
+                20.0
+            ]
         },
         "260": {
             "link": {
@@ -1962,7 +2057,28 @@
                 "name": "Pear_Pear_0<Pear<RootNode<Fruits.fbx<Sketchfab_model",
                 "file": "models\\fruits\\scene.gltf"
             },
-            "parent": "260"
+            "parent": "260",
+            "scaling": [
+                0.5,
+                0.5,
+                0.5
+            ],
+            "components": [
+                {
+                    "originalIndex": 0
+                },
+                {
+                    "type": "physx"
+                },
+                {
+                    "type": "collision"
+                }
+            ],
+            "translation": [
+                0.0,
+                0.0,
+                20.0
+            ]
         },
         "262": {
             "link": {
@@ -1990,7 +2106,28 @@
                 "name": "Watermelon_Watermelon_0<Watermelon<RootNode<Fruits.fbx<Sketchfab_model",
                 "file": "models\\fruits\\scene.gltf"
             },
-            "parent": "266"
+            "parent": "266",
+            "scaling": [
+                0.5,
+                0.5,
+                0.5
+            ],
+            "components": [
+                {
+                    "originalIndex": 0
+                },
+                {
+                    "type": "physx"
+                },
+                {
+                    "type": "collision"
+                }
+            ],
+            "translation": [
+                0.0,
+                0.0,
+                20.0
+            ]
         },
         "268": {
             "link": {
@@ -2004,7 +2141,28 @@
                 "name": "Tomato_Tomato_0<Tomato<RootNode<Fruits.fbx<Sketchfab_model",
                 "file": "models\\fruits\\scene.gltf"
             },
-            "parent": "268"
+            "parent": "268",
+            "scaling": [
+                0.5,
+                0.5,
+                0.5
+            ],
+            "components": [
+                {
+                    "originalIndex": 0
+                },
+                {
+                    "type": "physx"
+                },
+                {
+                    "type": "collision"
+                }
+            ],
+            "translation": [
+                0.0,
+                0.0,
+                20.0
+            ]
         },
         "270": {
             "link": {
@@ -2032,7 +2190,31 @@
                 "name": "GreenApple_GreenApple_0<GreenApple<RootNode<Fruits.fbx<Sketchfab_model",
                 "file": "models\\fruits\\scene.gltf"
             },
-            "parent": "274"
+            "parent": "274",
+            "scaling": [
+                0.5,
+                0.5,
+                0.5
+            ],
+            "components": [
+                {
+                    "originalIndex": 0
+                },
+                {
+                    "type": "physx"
+                },
+                {
+                    "type": "collision"
+                }
+            ],
+            "translation": [
+                0.0,
+                0.0,
+                20.0
+            ]
+        },
+        "276": {
+            "name": "Empty"
         }
     },
     "meshes": {

@@ -1,4 +1,8 @@
 import * as __wonderlandengine_components from '@wonderlandengine/components';
 _registerEditor(__wonderlandengine_components);
-import * as _C__Users_youss_OneDrive_Desktop_NEWEST_PROJECT_js_button_js from 'C:/Users/youss/OneDrive/Desktop/NEWEST PROJECT/js/button.js';
-_registerEditor(_C__Users_youss_OneDrive_Desktop_NEWEST_PROJECT_js_button_js);
+import * as _C__Users_vrsc4_Documents_WonderlandEngine_NEWEST_Cpe_Project_js_background_music_js from 'C:/Users/vrsc4/Documents/WonderlandEngine/NEWEST_Cpe_Project/js/background-music.js';
+_registerEditor(_C__Users_vrsc4_Documents_WonderlandEngine_NEWEST_Cpe_Project_js_background_music_js);
+import * as _C__Users_vrsc4_Documents_WonderlandEngine_NEWEST_Cpe_Project_js_button_js from 'C:/Users/vrsc4/Documents/WonderlandEngine/NEWEST_Cpe_Project/js/button.js';
+_registerEditor(_C__Users_vrsc4_Documents_WonderlandEngine_NEWEST_Cpe_Project_js_button_js);
+import * as _C__Users_vrsc4_Documents_WonderlandEngine_NEWEST_Cpe_Project_js_fruit_spawner_js from 'C:/Users/vrsc4/Documents/WonderlandEngine/NEWEST_Cpe_Project/js/fruit-spawner.js';
+_registerEditor(_C__Users_vrsc4_Documents_WonderlandEngine_NEWEST_Cpe_Project_js_fruit_spawner_js);
